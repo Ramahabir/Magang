@@ -16,11 +16,14 @@
 #define motorPin7 11 // Pin  7 of L293
 #define motorPin8 12 // Pin  2 of L293
 
+
+//Lifter
+#define lift1 8
+#define lift2 13
 // Servo 1 A0
 // Servo 2 A1
 
 Servo myservo1;
-Servo myservo2;
 
 String cmd;
 
@@ -36,16 +39,18 @@ void setup() {
   pinMode(motorPin6, OUTPUT);
   pinMode(motorPin7, OUTPUT);
   pinMode(motorPin8, OUTPUT);
+  pinMode(A4, OUTPUT);
+  pinMode(A5, OUTPUT);
+
   
   //Servo
   myservo1.attach(A0);
-  myservo2.attach(A1);
   myservo1.write(0);
-  myservo2.write(0);
-
-
-
   
+  //Lifter
+  pinMode(lift1, OUTPUT);
+  pinMode(lift2, OUTPUT);
+
   Serial.begin(9600);
 }
 
@@ -66,14 +71,15 @@ void loop() {
     	berhenti();
     } else if (cmd == "servo1"){
     	servo1_putar();
-    } else if(cmd == "servo2"){
-    	servo2_putar();
+    } else if(cmd == "atas"){
+    	keatas();
     } else if(cmd == "servo1_balik"){
     	servo1_putarbalik();
-    } else if(cmd == "servo1_balik"){
-    	servo2_putarbalik();
+    } else if(cmd == "bawah"){
+    	kebawah();
     }
   }
+  
 }
 
 
@@ -157,14 +163,12 @@ void servo1_putarbalik(){
   }
 }
 
-void servo2_putar(){
-  for (int i =0; i <=180; i++){
-  	myservo2.write(i);
-  }
+void keatas(){
+  digitalWrite(A4, HIGH);
+  digitalWrite(A5, LOW);
 }
 
-void servo2_putarbalik(){
-  for (int i =180; i >= 0; i--){
-  	myservo2.write(i);
-  }
+void kebawah(){
+  digitalWrite(A4, LOW);
+  digitalWrite(A5, HIGH);
 }
