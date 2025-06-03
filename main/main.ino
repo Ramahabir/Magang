@@ -1,4 +1,5 @@
 #include <Servo.h>
+#include <Ps3Controller.h>
 
 // Motor A (Back Left)
 
@@ -25,10 +26,6 @@
 
 Servo myservo1;
 
-String cmd;
-
-
-
 void setup() {
   //Motor
   pinMode(motorPin1, OUTPUT);
@@ -51,35 +48,39 @@ void setup() {
   pinMode(lift1, OUTPUT);
   pinMode(lift2, OUTPUT);
 
-  Serial.begin(9600);
+  Serial.begin(115200);
+  Ps3.begin("01:02:03:04:05:06");
+  Serial.println("Ready.");
 }
 
 void loop() {
 
-  if (Serial.available()){
+  if (Ps3.isConnected()){
   
     String cmd = Serial.readString();
-    if (cmd == "Maju"){
+    if (Ps3.data.button.up){
     	maju();
-    } else if (cmd == "Mundur"){
+    } else if (Ps3.data.button.down){
     	mundur();
-    } else if (cmd == "Kiri"){
+    } else if (Ps3.data.button.left){
     	kekiri();
-    } else if (cmd == "Kanan"){
+    } else if (Ps3.data.button.right){
     	kekanan();
-    } else if (cmd == "Stop"){
-    	berhenti();
-    } else if (cmd == "servo1"){
+    } else{
+    	berhenti();  
+    }
+    
+    if (Ps3.data.button.triangle){
     	servo1_putar();
-    } else if(cmd == "atas"){
+    } else if(Ps3.data.button.cross){
     	keatas();
-    } else if(cmd == "servo1_balik"){
+    } else if(Ps3.data.button.circle){
     	servo1_putarbalik();
-    } else if(cmd == "bawah"){
+    } else if(Ps3.data.button.square){
     	kebawah();
     }
   }
-  
+  delay(200);
 }
 
 
